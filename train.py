@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 29 11:44:33 2020
+
+@author: TKhadir
+"""
 import scipy as sc
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
@@ -5,6 +11,8 @@ import os
 from PIL import Image
 from sklearn.linear_model import LinearRegression
 import numpy as np
+from skimage.transform import resize
+from skimage import data, color
 
 model = LinearRegression()
 
@@ -14,18 +22,16 @@ patients_directory = "~\\COVID-19 Radiography Database\\patients\\"
 
 
 def rank(filename):
-    radio = mpimg.imread(filename)
+    radio = color.rgb2gray(mpimg.imread(filename))
     plt.figure()
     plt.imshow(radio, cmap='gray')
     plt.show()
-    X_train = radio.ravel()
-    print("length ==" + str(len(X_train)))
-    pred = model.predict([X_train])
-    print("predictions == " + str(pred))
+    X_train = [radio.ravel()]
+    print("predictions == " + str(model.predict(X_train)))
 
 
 def train(filename, coef):
-    radio = mpimg.imread(filename)
+    radio = color.rgb2gray(mpimg.imread(filename))
     X_train = radio.ravel()
     model.fit([X_train], [coef])
 
